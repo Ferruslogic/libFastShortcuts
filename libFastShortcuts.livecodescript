@@ -5,24 +5,24 @@ local sShortcutsArray,  sKeysMapping,  sKeysDownName, sValidateShortcut
 # The parameters are:
 # 1: the combination of keys pressed.
 # 2: The message that will be sent when these keys are pressed.
-# 3: The parameters it will send. (Obsional)
-# 4: The object to which this message will be sent. (Obsional) -> if it doesn't come it will fire as messages for all objects in the message flow)
+# 3: The parameters it will send. (Optional)
+# 4: The object to which this message will be sent. (Optional) -> if it doesn't come it will fire as messages for all objects in the message flow)
 
 command newShortcut pKeysDown, pMessageSend, pParams ,pTarget
     if _validateKeymap(pKeysDown)  then
-        answer error "La combinacion de teclas es incorrecta."
+        answer error "Invalid key combination."
         exit newShortcut
     end if
 
     if pKeysDown is among the keys of sShortcutsArray then
-        answer question "La combinacion de teclas ya esta siendo usada. Desea remplasarla?" with "No" or "Si"
-        if it is not "Si" then
+        answer question "This combination is already in use. Do you want to replace it?" with "No" or "Yes"
+        if it is not "Yes" then
             exit newShortcut
         end if
     end if
 
     if pMessageSend is empty then
-        answer error "no espesifico el manipulador que se generarra para la combinacion."
+        answer error "You must spacify the callback message."
         exit newShortcut
     end if
 
@@ -38,13 +38,13 @@ command removeShortcut pKeysDown
 end removeShortcut
 
 command updateShortcut pNewKeymap, pOldKeymap
-    if pNewKeymap then
-        answer error "Nueva combinacion de teclas icorrecta."
+    if pNewKeymap is empty then
+        answer error "You must especify the new shortcut."
         exit updateShortcut
     end if
 
     if sShortcutsArray[ pOldKeymap ] is not an array then
-        answer error "La combinacion de teclas que esta intentando actualizar no existe."
+        answer error "The shortcut you are attempting to update does not exists."
         exit updateShortcut
     end if
 
